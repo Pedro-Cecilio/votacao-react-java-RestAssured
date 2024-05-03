@@ -1,4 +1,4 @@
-package com.dbserver.restassured.usuario;
+package com.dbserver.restassured.auth;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.dbserver.restassured.fixture.LoginFixture;
-import com.dbserver.restassured.models.usuario.LoginEnvio;
+import com.dbserver.restassured.models.auth.LoginEnvio;
 
 import io.restassured.http.ContentType;
 

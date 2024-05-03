@@ -1,6 +1,6 @@
 package com.dbserver.restassured.fixture;
 
-import com.dbserver.restassured.models.usuario.LoginEnvio;
+import com.dbserver.restassured.models.auth.LoginEnvio;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
