@@ -20,7 +20,7 @@ import io.restassured.http.ContentType;
 
 class CriarPautaTest {
     private String token;
-    private final String ENDPOINT = "pauta";
+    private static final String ENDPOINT = "pauta";
 
     @BeforeAll
     static void setUp() {

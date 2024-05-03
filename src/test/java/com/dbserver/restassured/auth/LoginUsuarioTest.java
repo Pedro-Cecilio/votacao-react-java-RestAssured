@@ -14,7 +14,7 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 import io.restassured.http.ContentType;
 
 class LoginUsuarioTest {
-
+    private static final String ENDPOINT = "/login";
     @BeforeAll
     static void setUp() {
         baseURI = "http://localhost";
@@ -30,7 +30,7 @@ class LoginUsuarioTest {
                 .body(dadosLogin)
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/login")
+                .post(ENDPOINT)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .and().assertThat().body("token", notNullValue())
@@ -44,7 +44,7 @@ class LoginUsuarioTest {
                 .body(dadosLogin)
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/login")
+                .post(ENDPOINT)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .and().assertThat().body("token", notNullValue())
@@ -58,7 +58,7 @@ class LoginUsuarioTest {
                 .body(dadosLogin)
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/login")
+                .post(ENDPOINT)
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED)
                 .and().assertThat().body("erro", equalTo("Dados de login inválidos."));
@@ -71,7 +71,7 @@ class LoginUsuarioTest {
                 .body(dadosLogin)
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/login")
+                .post(ENDPOINT)
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED)
                 .and().assertThat().body("erro", equalTo("Dados de login inválidos."));
@@ -84,7 +84,7 @@ class LoginUsuarioTest {
                 .body(dadosLogin)
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/login")
+                .post(ENDPOINT)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Email com formato inválido."));
