@@ -124,4 +124,29 @@ class AbrirSessaoVotacaoTest {
                 .then()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
     }
+
+    @Test
+    void dadosEstouLogadoComoAdminQuandoAbroSessaoVotacaoJaAbertaEntaoDeveRetornarStatus400() {
+        AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
+                .abrirSessaoVotacaoCorretamente(this.pautaId);
+        given()
+                .header("Authorization", token)
+                .body(dadosAbrirSessaoVotacao)
+                .contentType(ContentType.JSON)
+                .when()
+                .post(ENDPOINT)
+                .then()
+                .statusCode(HttpStatus.SC_OK);
+
+        given()
+                .header("Authorization", token)
+                .body(dadosAbrirSessaoVotacao)
+                .contentType(ContentType.JSON)
+                .when()
+                .post(ENDPOINT)
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .and().assertThat().body("erro", equalTo("Pauta já possui uma votação aberta."));
+                
+    }
 }
