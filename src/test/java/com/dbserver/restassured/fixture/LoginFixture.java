@@ -2,10 +2,7 @@ package com.dbserver.restassured.fixture;
 
 import com.dbserver.restassured.models.auth.LoginEnvio;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginFixture {
     private static final String SENHA_ADMIN_CORRETA = "senhatestes";
     private static final String EMAIL_ADMIN_CORRETO = "restassuredAdmin@email.com";

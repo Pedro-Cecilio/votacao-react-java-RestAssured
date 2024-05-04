@@ -3,10 +3,8 @@ package com.dbserver.restassured.fixture;
 
 import com.dbserver.restassured.models.sessaoVotacao.VotoInternoDados;
 import com.dbserver.restassured.models.sessaoVotacao.enums.TipoDeVotoEnum;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+
 public class VotoInternoFixture {
 
     public static VotoInternoDados dadosVotoInternoPositivoValidos(Integer pautaid) {

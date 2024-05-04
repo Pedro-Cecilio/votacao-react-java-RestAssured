@@ -3,11 +3,9 @@ package com.dbserver.restassured.fixture;
 import java.util.Locale;
 
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
-import com.github.javafaker.Faker;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import net.datafaker.Faker;
+
 public class CriarPautaFixture {
     private static final Faker faker = new Faker(new Locale("pt-BR"));
     private static final String ASSUNTO = "Você sabe programar em Java?";
