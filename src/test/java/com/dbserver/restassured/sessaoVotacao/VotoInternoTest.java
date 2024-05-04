@@ -10,6 +10,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.dbserver.restassured.fixture.AbrirSessaoVotacaoFixture;
 import com.dbserver.restassured.fixture.CriarPautaFixture;
@@ -22,6 +23,7 @@ import com.dbserver.restassured.models.sessaoVotacao.VotoInternoDados;
 
 import io.restassured.http.ContentType;
 
+@SpringBootTest
 class VotoInternoTest {
     private String token;
     private Integer pautaId;

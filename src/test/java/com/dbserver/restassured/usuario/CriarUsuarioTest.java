@@ -6,6 +6,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.dbserver.restassured.fixture.CriarUsuarioFixture;
 import com.dbserver.restassured.fixture.LoginFixture;
@@ -14,9 +15,11 @@ import com.dbserver.restassured.models.usuario.CriarUsuarioEnvio;
 
 import io.restassured.http.ContentType;
 
+@SpringBootTest
 class CriarUsuarioTest {
     private String token;
     private final String ENDPOINT = "usuario";
+
     @BeforeAll
     static void setUp() {
         baseURI = "http://localhost/";
@@ -34,6 +37,7 @@ class CriarUsuarioTest {
                 .then()
                 .extract().path("token");
     }
+
 
     @Test
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioEntaoDeveRetornarNovoUsuario() {

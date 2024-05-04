@@ -11,6 +11,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.dbserver.restassured.fixture.CriarPautaFixture;
 import com.dbserver.restassured.fixture.LoginFixture;
@@ -18,6 +19,7 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
 import io.restassured.http.ContentType;
 
+@SpringBootTest
 class CriarPautaTest {
     private String token;
     private static final String ENDPOINT = "pauta";
