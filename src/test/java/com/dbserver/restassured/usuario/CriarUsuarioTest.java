@@ -2,9 +2,9 @@ package com.dbserver.restassured.usuario;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,44 +12,28 @@ import com.dbserver.restassured.fixture.CriarUsuarioFixture;
 import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.usuario.CriarUsuarioEnvio;
+import com.dbserver.restassured.utils.TestUtils;
 
-import io.restassured.http.ContentType;
 
 @SpringBootTest
 class CriarUsuarioTest {
-    private String token;
-    private final String ENDPOINT = "usuario";
+    private static String tokenAdmin;
 
     @BeforeAll
     static void setUp() {
         baseURI = "http://localhost/";
         port = 8080;
-    }
 
-    @BeforeEach
-    void configurar() {
         LoginEnvio dadosLogin = LoginFixture.dadosLoginAdminValido();
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+        tokenAdmin = TestUtils.fazerLoginEObterToken(dadosLogin);
     }
-
 
     @Test
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioEntaoDeveRetornarNovoUsuario() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioCorretamente();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .and().assertThat().body("id", notNullValue())
@@ -63,22 +47,11 @@ class CriarUsuarioTest {
     @Test
     void dadosEstouLogadoComoUsuarioQuandoTentoCriarNovoUsuarioEntaoDeveRetornarStatus403() {
         LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+        String tokenUsuario = TestUtils.fazerLoginEObterToken(dadosLogin);
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioCorretamente();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenUsuario)
                 .then()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
     }
@@ -88,15 +61,11 @@ class CriarUsuarioTest {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioEmailInvalido();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Email com formato inválido."));
+
     }
 
     @Test
@@ -104,12 +73,7 @@ class CriarUsuarioTest {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioSenhaInvalida();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Senha deve conter 8 caracteres no mínimo."));
@@ -120,12 +84,7 @@ class CriarUsuarioTest {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioNomeInvalido();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Nome deve conter entre 3 e 20 caracteres."));
@@ -136,12 +95,7 @@ class CriarUsuarioTest {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioSobrenomeInvalido();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Sobrenome deve conter entre 2 e 20 caracteres."));
@@ -152,12 +106,7 @@ class CriarUsuarioTest {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioCpfInvalido();
 
-        given()
-                .header("Authorization", token)
-                .body(novoUsuario)
-                .contentType(ContentType.JSON)
-                .when()
-                .post(ENDPOINT)
+        TestUtils.cadastrarUsuario(novoUsuario, tokenAdmin)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .and().assertThat().body("erro", equalTo("Cpf deve conter 11 caracteres numéricos."));
