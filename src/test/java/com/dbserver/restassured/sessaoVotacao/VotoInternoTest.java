@@ -20,166 +20,103 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
 import com.dbserver.restassured.models.sessaoVotacao.AbrirSessaoVotacaoDados;
 import com.dbserver.restassured.models.sessaoVotacao.VotoInternoDados;
+import com.dbserver.restassured.utils.TestUtils;
 
 import io.restassured.http.ContentType;
 
 @SpringBootTest
 class VotoInternoTest {
-    private String token;
-    private Integer pautaId;
-    private static final String ENDPOINT = "votacao/votoInterno";
+        private static String tokenAdmin;
+        private static String tokenUsuario;
+        private Integer pautaId;
 
-    @BeforeAll
-    static void setUp() {
-        baseURI = "http://localhost/";
-        port = 8080;
-    }
+        @BeforeAll
+        static void setUp() {
+                baseURI = "http://localhost/";
+                port = 8080;
 
-    @BeforeEach
-    void configurar() {
-        LoginEnvio dadosLogin = LoginFixture.dadosLoginAdminValido();
-        CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCorretamente();
+                LoginEnvio dadosLoginAdmin = LoginFixture.dadosLoginAdminValido();
+                LoginEnvio dadosLoginUsuario = LoginFixture.dadosLoginUsuarioValido();
 
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+                tokenAdmin = TestUtils.fazerLoginEObterToken(dadosLoginAdmin);
+                tokenUsuario = TestUtils.fazerLoginEObterToken(dadosLoginUsuario);
+        }
 
-        this.pautaId = given()
-                .header("Authorization", token)
-                .body(novaPauta)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("pauta")
-                .then()
-                .extract().path("id");
+        @BeforeEach
+        void configurar() {
+                CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCorretamente();
 
-        AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
-                .abrirSessaoVotacaoCorretamente(this.pautaId);
+                this.pautaId = TestUtils.cadastrarPauta(novaPauta, tokenAdmin)
+                                .then()
+                                .extract().path("id");
 
-        given()
-                .header("Authorization", token)
-                .body(dadosAbrirSessaoVotacao)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("votacao/abrir")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .and().assertThat().body("id", notNullValue())
-                .and().assertThat().body("pautaId", equalTo(this.pautaId));
-    }
+                AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
+                                .abrirSessaoVotacaoCorretamente(this.pautaId);
 
-    @Test
-    void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus200() {
-        LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
-        VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+                TestUtils.abrirSessaoVotacao(dadosAbrirSessaoVotacao, tokenAdmin)
+                                .then()
+                                .statusCode(HttpStatus.SC_OK)
+                                .and().assertThat().body("id", notNullValue())
+                                .and().assertThat().body("pautaId", equalTo(this.pautaId));
+        }
 
-        given()
-                .header("Authorization", token)
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .and().assertThat().body("id", notNullValue())
-                .and().assertThat().body("pautaId", equalTo(this.pautaId))
-                .and().assertThat().body("votosPositivos", equalTo(1));
-    }
+        @Test
+        void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus200() {
+                VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
-    @Test
-    void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaQueJaVoteiEntaoDeveRetornarStatus400() {
-        LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
+                TestUtils.inserirVotoInterno(votoInternoDados, tokenUsuario)
+                                .then()
+                                .statusCode(HttpStatus.SC_OK)
+                                .and().assertThat().body("id", notNullValue())
+                                .and().assertThat().body("pautaId", equalTo(this.pautaId))
+                                .and().assertThat().body("votosPositivos", equalTo(1));
+        }
 
-        VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
-        
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+        @Test
+        void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaQueJaVoteiEntaoDeveRetornarStatus400() {
+                VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
-        given()
-                .header("Authorization", token)
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_OK);
+                TestUtils.inserirVotoInterno(votoInternoDados, tokenUsuario)
+                                .then()
+                                .statusCode(HttpStatus.SC_OK);
 
-        given()
-                .header("Authorization", token)
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .and().assertThat().body("erro", equalTo("Não é possível votar duas vezes."));
-    }
+                TestUtils.inserirVotoInterno(votoInternoDados, tokenUsuario)
+                                .then()
+                                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                                .and().assertThat().body("erro", equalTo("Não é possível votar duas vezes."));
+        }
 
-    @Test
-    void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaTipoDeVotoInvalidoEntaoDeveRetornarStatus400() {
-        LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
+        @Test
+        void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaTipoDeVotoInvalidoEntaoDeveRetornarStatus400() {
+                VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoTipoVotoNulo(pautaId);
 
-        VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoTipoVotoNulo(pautaId);
+                TestUtils.inserirVotoInterno(votoInternoDados, tokenUsuario)
+                                .then()
+                                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                                .and().assertThat().body("erro", equalTo("O tipo do voto deve ser informado."));
+        }
 
-        this.token = given()
-                .body(dadosLogin)
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/auth/login")
-                .then()
-                .extract().path("token");
+        @Test
+        void dadosEstouLogadoComCriadorDaPautaQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus400() {
+                VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
-        given()
-                .header("Authorization", token)
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .and().assertThat().body("erro", equalTo("O tipo do voto deve ser informado."));
-    }
-    @Test
-    void dadosEstouLogadoComCriadorDaPautaQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus400() {
-        VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
+                TestUtils.inserirVotoInterno(votoInternoDados, tokenAdmin)
+                                .then()
+                                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                                .and().assertThat().body("erro", equalTo("O criador não pode votar na pauta criada."));
 
-        given()
-                .header("Authorization", token)
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .and().assertThat().body("erro", equalTo("O criador não pode votar na pauta criada."));
-    }
+        }
 
-    @Test
-    void dadosNaoEstouLogadoQuandoTentoVotarEmUmaPautaAbertaEntaoDeveRetornarStatus403() {
-        VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
+        @Test
+        void dadosNaoEstouLogadoQuandoTentoVotarEmUmaPautaAbertaEntaoDeveRetornarStatus403() {
+                VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
-        given()
-                .body(votoInternoDados)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch(ENDPOINT)
-                .then()
-                .statusCode(HttpStatus.SC_FORBIDDEN);
-    }
+                given()
+                                .body(votoInternoDados)
+                                .contentType(ContentType.JSON)
+                                .when()
+                                .patch("votacao/votoInterno")
+                                .then()
+                                .statusCode(HttpStatus.SC_FORBIDDEN);
+        }
 }
