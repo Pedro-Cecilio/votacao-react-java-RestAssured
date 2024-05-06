@@ -5,10 +5,12 @@ import java.util.Locale;
 import com.dbserver.restassured.models.sessaoVotacao.VotoExternoDados;
 import com.dbserver.restassured.models.sessaoVotacao.enums.TipoDeVotoEnum;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.datafaker.Faker;
 
 
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VotoExternoFixture {
     private static final Faker faker = new Faker(new Locale("pt-BR"));
 
