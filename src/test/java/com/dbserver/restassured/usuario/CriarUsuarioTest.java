@@ -1,6 +1,5 @@
 package com.dbserver.restassured.usuario;
 
-import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import org.apache.http.HttpStatus;
@@ -13,17 +12,15 @@ import com.dbserver.restassured.fixture.CriarUsuarioFixture;
 import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.usuario.CriarUsuarioEnvio;
+import com.dbserver.restassured.restAssuredConfig.RestAssuredBase;
 import com.dbserver.restassured.utils.TestUtils;
 
 @SpringBootTest
-class CriarUsuarioTest {
+class CriarUsuarioTest extends RestAssuredBase{
     private static String tokenAdmin;
 
     @BeforeAll
     static void setUp() {
-        baseURI = "http://localhost/";
-        port = 8080;
-
         LoginEnvio dadosLogin = LoginFixture.dadosLoginAdminValido();
         tokenAdmin = TestUtils.fazerLoginEObterToken(dadosLogin);
     }

@@ -1,7 +1,5 @@
 package com.dbserver.restassured.pauta;
 
-import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.port;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -16,17 +14,15 @@ import com.dbserver.restassured.fixture.CriarPautaFixture;
 import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
+import com.dbserver.restassured.restAssuredConfig.RestAssuredBase;
 import com.dbserver.restassured.utils.TestUtils;
 
 @SpringBootTest
-class CriarPautaTest {
+class CriarPautaTest extends RestAssuredBase {
     private static String tokenAdmin;
 
     @BeforeAll
     static void setUp() {
-        baseURI = "http://localhost/";
-        port = 8080;
-
         LoginEnvio dadosLogin = LoginFixture.dadosLoginAdminValido();
         tokenAdmin = TestUtils.fazerLoginEObterToken(dadosLogin);
     }

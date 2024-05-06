@@ -1,8 +1,6 @@
 package com.dbserver.restassured.sessaoVotacao;
 
-import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.port;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -21,21 +19,19 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
 import com.dbserver.restassured.models.sessaoVotacao.AbrirSessaoVotacaoDados;
 import com.dbserver.restassured.models.sessaoVotacao.VotoInternoDados;
+import com.dbserver.restassured.restAssuredConfig.RestAssuredBase;
 import com.dbserver.restassured.utils.TestUtils;
 
 import io.restassured.http.ContentType;
 
 @SpringBootTest
-class VotoInternoTest {
+class VotoInternoTest extends RestAssuredBase{
         private static String tokenAdmin;
         private static String tokenUsuario;
         private Integer pautaId;
 
         @BeforeAll
         static void setUp() {
-                baseURI = "http://localhost/";
-                port = 8080;
-
                 LoginEnvio dadosLoginAdmin = LoginFixture.dadosLoginAdminValido();
                 LoginEnvio dadosLoginUsuario = LoginFixture.dadosLoginUsuarioValido();
 

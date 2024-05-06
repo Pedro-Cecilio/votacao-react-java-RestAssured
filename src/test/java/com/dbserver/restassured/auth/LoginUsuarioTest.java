@@ -1,25 +1,18 @@
 package com.dbserver.restassured.auth;
 
-import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
-
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
+import com.dbserver.restassured.restAssuredConfig.RestAssuredBase;
 import com.dbserver.restassured.utils.TestUtils;
 
 @SpringBootTest
-class LoginUsuarioTest {
-    @BeforeAll
-    static void setUp() {
-        baseURI = "http://localhost/";
-        port = 8080;
-    }
+class LoginUsuarioTest extends RestAssuredBase{
 
     @Test
     @DisplayName("Deve ser possível realizar login com admin ao informar dados corretamente")
