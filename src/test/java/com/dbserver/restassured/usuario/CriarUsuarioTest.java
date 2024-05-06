@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.*;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,7 +14,6 @@ import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.usuario.CriarUsuarioEnvio;
 import com.dbserver.restassured.utils.TestUtils;
-
 
 @SpringBootTest
 class CriarUsuarioTest {
@@ -29,6 +29,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Deve ser possível criar outro usuário ao estar logado como admin")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioEntaoDeveRetornarNovoUsuario() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioCorretamente();
@@ -45,6 +46,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao estar logado como usuário")
     void dadosEstouLogadoComoUsuarioQuandoTentoCriarNovoUsuarioEntaoDeveRetornarStatus403() {
         LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
         String tokenUsuario = TestUtils.fazerLoginEObterToken(dadosLogin);
@@ -57,6 +59,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao enviar email inválido")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioEmailInvalidoEntaoDeveRetornarStatus400() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioEmailInvalido();
@@ -69,6 +72,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao enviar senha inválida")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioSenhaInvalidaEntaoDeveRetornarStatus400() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioSenhaInvalida();
@@ -80,6 +84,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao enviar nome inválido")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioNomeInvalidoEntaoDeveRetornarStatus400() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioNomeInvalido();
@@ -91,6 +96,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao enviar sobrenome inválido")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioSobrenomeInvalidoEntaoDeveRetornarStatus400() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioSobrenomeInvalido();
@@ -102,6 +108,7 @@ class CriarUsuarioTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar novo usuário ao enviar cpf inválido")
     void dadosEstouLogadoComoAdminQuandoCrioNovoUsuarioCpfInvalidoEntaoDeveRetornarStatus400() {
 
         CriarUsuarioEnvio novoUsuario = CriarUsuarioFixture.criarUsuarioCpfInvalido();

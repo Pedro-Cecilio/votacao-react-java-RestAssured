@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -54,6 +55,7 @@ class VotoExternoTest {
     }
 
     @Test
+    @DisplayName("Deve ser possível votar externamente em uma pauta")
     void dadosPossuoDadosVotoExternoValidosQuandoVotoExternamenteEmUmaPautaEntaoDeveRetornarStatus200() {
         VotoExternoDados votoExternoDados = VotoExternoFixture.dadosVotoExternoUsuarioExistenteValido(pautaId);
 
@@ -66,6 +68,7 @@ class VotoExternoTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível votar externamente em uma pauta ao informar cpf de usuario cadastrado e não informar senha")
     void dadosCpfUsuarioExistenteESemSenhaQuandoVotoExternamenteEmUmaPautaEntaoDeveRetornarStatus401() {
         VotoExternoDados votoExternoDados = VotoExternoFixture.dadosVotoExternoUsuarioExistenteSemSenha(pautaId);
 
@@ -76,6 +79,7 @@ class VotoExternoTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível votar externamente em uma pauta ao informar cpf inválido")
     void dadosCpfInvalidoQuandoVotoExternamenteEmUmaPautaEntaoDeveRetornarStatus400() {
         VotoExternoDados votoExternoDados = VotoExternoFixture.dadosVotoExternoUsuarioNaoCadastradoCpfInvalido(pautaId);
 

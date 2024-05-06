@@ -31,6 +31,7 @@ class LoginUsuarioTest {
                 .and().assertThat().body("token", notNullValue())
                 .and().assertThat().body("admin", equalTo(true));
     }
+
     @Test
     @DisplayName("Deve ser possível realizar login com usuario ao informar dados corretamente")
     void givenDadosLoginUsuarioValidosWhenEfetuoLoginThenRetornarToken() {
@@ -41,6 +42,7 @@ class LoginUsuarioTest {
                 .and().assertThat().body("token", notNullValue())
                 .and().assertThat().body("admin", equalTo(false));
     }
+
     @Test
     @DisplayName("Deve retornar mensagem de erro ao enviar dados de login com senha incorreta")
     void givenSenhaIncorretaWhenEfetuoLoginThenRetornarRetornarMensagemDeErro() {
@@ -51,6 +53,7 @@ class LoginUsuarioTest {
                 .and().assertThat().body("erro", equalTo("Dados de login inválidos."));
 
     }
+
     @Test
     @DisplayName("Deve retornar mensagem de erro ao enviar dados de login com email incorreto")
     void givenEmailIncorretoWhenEfetuoLoginThenRetornarRetornarMensagemDeErro() {
@@ -60,6 +63,7 @@ class LoginUsuarioTest {
                 .statusCode(HttpStatus.SC_UNAUTHORIZED)
                 .and().assertThat().body("erro", equalTo("Dados de login inválidos."));
     }
+
     @Test
     @DisplayName("Deve retornar mensagem de erro ao enviar dados de login com email com formato inválido")
     void givenEmailInvalidoWhenEfetuoLoginThenRetornarRetornarMensagemDeErro() {
@@ -70,5 +74,4 @@ class LoginUsuarioTest {
                 .and().assertThat().body("erro", equalTo("Email com formato inválido."));
     }
 
-    
 }

@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,7 +17,6 @@ import com.dbserver.restassured.fixture.LoginFixture;
 import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
 import com.dbserver.restassured.utils.TestUtils;
-
 
 @SpringBootTest
 class CriarPautaTest {
@@ -32,12 +31,8 @@ class CriarPautaTest {
         tokenAdmin = TestUtils.fazerLoginEObterToken(dadosLogin);
     }
 
-    @BeforeEach
-    void configurar() {
-
-    }
-
     @Test
+    @DisplayName("Deve ser possível criar uma nova pauta ao estar logado como administrador")
     void dadosEstouLogadoComoAdminQuandoCrioUmaNovaPautaEntaoDeveRetornarPautaCriada() {
 
         CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCorretamente();
@@ -53,6 +48,7 @@ class CriarPautaTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar uma nova pauta ao estar logado como usuario")
     void dadosEstouLogadoComoUsuarioQuandoTentoCrioUmaNovaPautaEntaoDeveRetornarStatus403() {
         LoginEnvio dadosLogin = LoginFixture.dadosLoginUsuarioValido();
         String tokenUsuario = TestUtils.fazerLoginEObterToken(dadosLogin);
@@ -65,6 +61,7 @@ class CriarPautaTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar uma pauta, ao enviar assunto nulo")
     void dadosEstouLogadoComoAdminQuandoCrioUmaNovaPautaAssuntoNuloEntaoDeveRetornarStatus400() {
 
         CriarPautaDados novaPauta = CriarPautaFixture.criarPautaAssuntoNulo();
@@ -76,6 +73,7 @@ class CriarPautaTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar uma pauta, ao enviar categoria nula")
     void dadosEstouLogadoComoAdminQuandoCrioUmaNovaPautaCategoriaNulaEntaoDeveRetornarStatus400() {
 
         CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCategoriaNula();
@@ -87,6 +85,7 @@ class CriarPautaTest {
     }
 
     @Test
+    @DisplayName("Não deve ser possível criar uma pauta, ao enviar categoria inválida")
     void dadosEstouLogadoComoAdminQuandoCrioUmaNovaPautaCategoriaInvalidaEntaoDeveRetornarStatus400() {
 
         CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCategoriaInvalida();

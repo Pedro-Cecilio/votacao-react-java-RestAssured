@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -61,6 +62,7 @@ class VotoInternoTest {
         }
 
         @Test
+        @DisplayName("Deve ser possível votar em uma pauta estando logado na aplicação")
         void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus200() {
                 VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
@@ -73,6 +75,7 @@ class VotoInternoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível votar em uma pauta que já votei")
         void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaQueJaVoteiEntaoDeveRetornarStatus400() {
                 VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
@@ -87,6 +90,7 @@ class VotoInternoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível votar em uma pauta ao informar tipo de voto inválido")
         void dadosEstouLogadoComoUsuarioQuandoVotoEmUmaPautaTipoDeVotoInvalidoEntaoDeveRetornarStatus400() {
                 VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoTipoVotoNulo(pautaId);
 
@@ -97,6 +101,7 @@ class VotoInternoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível o criador da pauta votar na pauta criada")
         void dadosEstouLogadoComCriadorDaPautaQuandoVotoEmUmaPautaAbertaEntaoDeveRetornarStatus400() {
                 VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 
@@ -108,6 +113,7 @@ class VotoInternoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível votar internamente em uma pauta quando não estiver logado na aplicação")
         void dadosNaoEstouLogadoQuandoTentoVotarEmUmaPautaAbertaEntaoDeveRetornarStatus403() {
                 VotoInternoDados votoInternoDados = VotoInternoFixture.dadosVotoInternoPositivoValidos(pautaId);
 

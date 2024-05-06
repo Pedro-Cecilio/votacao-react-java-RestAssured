@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +19,6 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 import com.dbserver.restassured.models.pauta.CriarPautaDados;
 import com.dbserver.restassured.models.sessaoVotacao.AbrirSessaoVotacaoDados;
 import com.dbserver.restassured.utils.TestUtils;
-
 
 @SpringBootTest
 class AbrirSessaoVotacaoTest {
@@ -42,6 +42,7 @@ class AbrirSessaoVotacaoTest {
         }
 
         @Test
+        @DisplayName("Deve ser possível abrir sessão de votação em uma pauta corretamente")
         void dadosEstouLogadoComoAdminQuandoAbroSessaoVotacaoEntaoDeveRetornarStatus200() {
                 AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
                                 .abrirSessaoVotacaoCorretamente(this.pautaId);
@@ -54,6 +55,7 @@ class AbrirSessaoVotacaoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível abrir sessão de votação , ao informar uma pauta inexistente, ou que o admin logado não possui")
         void dadosEstouLogadoComoAdminQuandoAbroSessaoVotacaoEmPautaInexistenteEntaoDeveRetornarStatus404() {
                 AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
                                 .abrirSessaoVotacaoPautaInexistente();
@@ -65,6 +67,7 @@ class AbrirSessaoVotacaoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível abrir sessão de votação, ao enviar minutos inválidos")
         void dadosEstouLogadoComoAdminQuandoAbroSessaoVotacaoMinutosInvalidosEntaoDeveRetornarStatus404() {
                 AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
                                 .abrirSessaoVotacaoMinutosInvalido(this.pautaId);
@@ -76,6 +79,7 @@ class AbrirSessaoVotacaoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível abrir sessão de votação, ao estar logado como usuário")
         void dadosEstouLogadoComoUsuarioQuandoTentoAbrirSessaoVotacaoEntaoDeveRetornarStatus403() {
                 AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
                                 .abrirSessaoVotacaoMinutosInvalido(this.pautaId);
@@ -90,6 +94,7 @@ class AbrirSessaoVotacaoTest {
         }
 
         @Test
+        @DisplayName("Não deve ser possível abrir sessão de votação em uma pauta que já teve sessão aberta")
         void dadosEstouLogadoComoAdminQuandoAbroSessaoVotacaoJaAbertaEntaoDeveRetornarStatus400() {
                 AbrirSessaoVotacaoDados dadosAbrirSessaoVotacao = AbrirSessaoVotacaoFixture
                                 .abrirSessaoVotacaoCorretamente(this.pautaId);
