@@ -2,12 +2,10 @@ package com.dbserver.restassured.fixture;
 
 import com.dbserver.restassured.models.sessaoVotacao.AbrirSessaoVotacaoDados;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+
 
 import java.util.Random;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AbrirSessaoVotacaoFixture {
     private static final long MINUTOS = 2L;
     private static final Random random = new Random();

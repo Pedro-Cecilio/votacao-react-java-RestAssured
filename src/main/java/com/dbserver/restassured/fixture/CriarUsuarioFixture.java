@@ -5,11 +5,9 @@ import java.util.Locale;
 import com.dbserver.restassured.models.auth.AutenticacaoDados;
 import com.dbserver.restassured.models.usuario.CriarUsuarioEnvio;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+
 import net.datafaker.Faker;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CriarUsuarioFixture {
     private static final Faker faker = new Faker(new Locale("pt-BR"));
     private static final String SENHA_VALIDA = "senhaTestes";
