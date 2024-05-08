@@ -6,10 +6,10 @@ import com.dbserver.restassured.models.auth.LoginEnvio;
 
 
 public class LoginFixture {
-    private static final String SENHA_ADMIN_CORRETA = "senhatestes";
-    private static final String EMAIL_ADMIN_CORRETO = "restassuredAdmin@email.com";
-    private static final String SENHA_USUARIO_CORRETA = "senhatestes";
-    private static final String EMAIL_USUARIO_CORRETO = "restassuredUsuario@email.com";
+    private static final String SENHA_ADMIN_CORRETA = "testes123";
+    private static final String EMAIL_ADMIN_CORRETO = "testesAdmin@email.com";
+    private static final String SENHA_USUARIO_CORRETA = "testes123";
+    private static final String EMAIL_USUARIO_CORRETO = "testesUsuario@email.com";
 
     public static LoginEnvio dadosLoginAdminValido() {
         return LoginEnvio.builder()
