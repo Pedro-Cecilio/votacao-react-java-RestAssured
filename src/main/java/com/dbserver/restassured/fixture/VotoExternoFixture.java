@@ -16,7 +16,7 @@ public class VotoExternoFixture {
         return VotoExternoDados.builder()
                 .pautaId(pautaid)
                 .cpf("12345678912")
-                .senha("senhatestes")
+                .senha("testes123")
                 .tipoDeVoto(TipoDeVotoEnum.VOTO_POSITIVO)
                 .build();
     }
