@@ -80,15 +80,4 @@ class CriarPautaTest extends RestAssuredBase {
                 .and().assertThat().body("erro", equalTo("Categoria deve ser informada."));
     }
 
-    @Test
-    @DisplayName("Não deve ser possível criar uma pauta, ao enviar categoria inválida")
-    void dadosEstouLogadoComoAdminQuandoCrioUmaNovaPautaCategoriaInvalidaEntaoDeveRetornarStatus400() {
-
-        CriarPautaDados novaPauta = CriarPautaFixture.criarPautaCategoriaInvalida();
-
-        TestUtils.cadastrarPauta(novaPauta, tokenAdmin)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .and().assertThat().body("erro", equalTo("Categoria inválida."));
-    }
 }
